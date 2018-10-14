@@ -1,0 +1,22 @@
+{
+  "name": "tempo-toy-bitwig",
+  "version": "1.0.0",
+  "description": "Send osc to my custom bitwig script, for the purposes of creating tempo ramps",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CharlesHolbrow/tempo-toy-bigwig.git"
+  },
+  "author": "Charles",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/CharlesHolbrow/tempo-toy-bigwig/issues"
+  },
+  "homepage": "https://github.com/CharlesHolbrow/tempo-toy-bigwig#readme",
+  "dependencies": {
+    "underscore": "^1.9.1"
+  }
+}
