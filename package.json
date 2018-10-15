@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/CharlesHolbrow/tempo-toy-bigwig#readme",
   "dependencies": {
+    "osc": "^2.2.4",
     "underscore": "^1.9.1"
   }
 }
