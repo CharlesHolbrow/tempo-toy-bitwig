@@ -30,17 +30,17 @@ const ramp = function(initialBpm, finalBpm, durationInBeatsAtInitialTempo, beats
   // array of times (in minutes) at which we will sample our curves
   const time = _(_.range(resolution + 1)).map(function(val){return val / resolution * durationInMinutes});
 
-  // array of how many beats (in the changing tempo) have elapsed relative to time
+  // how many beats (in the changing tempo) have elapsed sampled at <resolution>
   const rampBeatsElapsed = _(time).map(function(t){
     return 0 + (v0 * t) + (a0 * t * t)/2 + (a1 * t * t * t)/6;
   });
 
-  // array of current tempo, sampled <resolution> times
+  // current tempo, sampled at <resolution>
   const bpm = _(time).map(function(t){
     return v0 + (a0 * t) + (a1 * t * t)/2;
   });
 
-  // array of beats elapsed, samples at resuolution
+  // how many beats (in the static tempo) elapsed, sampled at <resuolution>
   const staticBeatsElapsed = _(time).map(function(t){
     return initialBpm * t;
   });
