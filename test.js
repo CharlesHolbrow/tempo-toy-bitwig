@@ -1,49 +1,33 @@
-const osc = require('osc');
+const _ = require('underscore');
 const ramp = require('./tempo-ramp.js');
 const create = require('./create-messages.js');
+const BitwigIO = require('./BitwigIO.js');
+
+const io = new BitwigIO;
 
 // generate timing info
-const r1 = ramp(60, 70, 6, 7);
-const r2 = ramp(60, 70, 6, 8);
-const r3 = ramp(60, 70, 6, 9);
+const rampLengths = [ 85, 84, 83, 82, 81, 80 ];
+const notes =      [ 47, 50, 54, 57, 60, 64 ];
 
-const io = new osc.UDPPort({
-    metadata: true,
-    // localAddress: "127.0.0.1",
-    // localPort: 9001,
-    remoteAddress: "127.0.0.1",
-    remotePort: 9000,
+// generate ramps
+const ramps = ramp(90, 135, 64, rampLengths);
+console.log('done generatng ramps')
+
+_.zip(ramps, notes).forEach((r) => {
+    const [ramp, note] = r;
+    ramp.rampBeatTimes.forEach((time) => {
+        const beats = time * 60;
+        const msg = create.launcherClipNote(note, 80, beats, 0.25);
+        io.send(msg);
+    });
 });
 
-io.on('ready', () => {
-    console.log('ready!!');
-    r1.rampBeatTimes.forEach(time => {
-        const beats = time * 60;
-        const msg = create.launcherClipNote(60, 120, beats, 0.2);
-        io.send(msg);
-    });
-    r1.staticBeatTimes.forEach(time => {
-        const beats = time * 60;
-        const msg = create.launcherClipNote(62, 100, beats, 0.2);
-        io.send(msg);
-    });
-    r2.rampBeatTimes.forEach(time => {
-        const beats = time * 60;
-        const msg = create.launcherClipNote(58, 120, beats, 0.2);
-        io.send(msg);
-    });
-    r3.rampBeatTimes.forEach(time => {
-        const beats = time * 60;
-        const msg = create.launcherClipNote(56, 120, beats, 0.2);
-        io.send(msg);
-    });
-    setTimeout(() => {
-        process.exit()
-    }, 3000);
+ramps[0].staticBeatTimes.forEach((time) => {
+    msg = create.launcherClipNote(39, 100, time * 60, 0.25);
+    io.send(msg);
 });
 
-io.on('error', (e) => {
-    console.error('osc io error:', e);
+// quit when we are finished sending
+io.on('empty', () => {
+    setTimeout(() => { process.exit()}, 100 );
 });
-
-io.open();

@@ -1,5 +1,3 @@
-const osc = require('osc');
-
 /**
  * Returns a `create-note` message. Sending this message to bitwig will create
  * a note in the currently selected launcher clip.
@@ -8,7 +6,6 @@ const osc = require('osc');
  * @param {Float} startBeat - start time in beats
  * @param {Float} durationBeat - duration in beats
  */
-
 const launcherClipNote = function(midiNoteNumber, midiVelocity, startBeat, durationBeat) {
     return {
         address: '/launcher/selected-clip/create-note',

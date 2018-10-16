@@ -5,14 +5,22 @@ _ = require('underscore');
  * @param {Number} finalBpm - tempo to accelerate or decelerate to
  * @param {Number} durationInBeatsAtInitialTempo - How long should the
  *        transition last, measure in beats at the initial tempo.
- * @param {Number} beatsInChangingTempo - how many beats in the changing tempo
- * @param {[Number]} resolution - The equation is not solved for exact beat
- *        locations, so we evaluate it at a fixed interval to find the beats
+ * @param {Number|Number[]} beatsInChangingTempo - how many beats in the
+ *        changing tempo.
+ * @param {Number} [resolution] - The equation is not solved for exact beat
+ *        locations, so we evaluate it at a fixed interval to find the beats.
  */
 const ramp = function(initialBpm, finalBpm, durationInBeatsAtInitialTempo, beatsInChangingTempo, resolution) {
   const v0 = initialBpm;
   const v1 = finalBpm;
   const b1 = beatsInChangingTempo;
+
+  // check if this is an array. If it is, return an array of results
+  if (_.isArray(beatsInChangingTempo)) {
+    return beatsInChangingTempo.map((b) => {
+      return ramp(v0, v1, durationInBeatsAtInitialTempo, b, resolution);
+    });
+  };
 
   // durationInMinutes and t have the same value. Note that t is occasionally
   // used in the argument to an iterator function.
