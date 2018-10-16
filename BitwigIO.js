@@ -45,7 +45,6 @@ class BitwigIO extends EventEmitter {
 
     send() {
         if (!this.ready) {
-
             this.queue.push(arguments)
         } else {
             this.port.send.apply(this.port, arguments);

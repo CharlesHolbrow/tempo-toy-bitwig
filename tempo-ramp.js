@@ -6,7 +6,7 @@ _ = require('underscore');
  * @param {Number} durationInBeatsAtInitialTempo - How long should the
  *        transition last, measure in beats at the initial tempo.
  * @param {Number|Number[]} beatsInChangingTempo - how many beats in the
- *        changing tempo.
+ *        changing tempo. If this is an array, return an array of ramps.
  * @param {Number} [resolution] - The equation is not solved for exact beat
  *        locations, so we evaluate it at a fixed interval to find the beats.
  */
