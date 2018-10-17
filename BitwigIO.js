@@ -20,7 +20,6 @@ class BitwigIO extends EventEmitter {
 
         // messages sent before we are ready should be saved here
         this.queue = [];
-        // messages are
         this.ready = false;
 
         // handlers for UDP events
