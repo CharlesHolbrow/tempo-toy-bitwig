@@ -27,6 +27,33 @@ const launcherClipNote = function(midiNoteNumber, midiVelocity, startBeat, durat
     }
 }
 
+/**
+ * Create a new clip. An existing clip in the specified position will be
+ * renamed, but not cleared or removed. The clip will be selected in the GUI.
+ * @param {Integer} trackIndex - The track number to insert the clip, beginning
+ *        from the top/left
+ * @param {Integer} clipIndex - The scene position, beginning from the top/left
+ * @param {String} clipName - Name the clip. Will overwrite an existing name
+ */
+const launcherClip = function(trackIndex, clipIndex, clipName) {
+    return {
+        address: '/launcher/create-clip',
+        args: [
+            {
+                type: 'i',
+                value: trackIndex,
+            },{
+                type: 'i',
+                value: clipIndex,
+            },{
+                type: 's',
+                value: clipName,
+            }
+        ],
+    };
+};
+
 module.exports = {
     launcherClipNote,
+    launcherClip,
 };
