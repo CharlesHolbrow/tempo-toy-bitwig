@@ -1,7 +1,4 @@
-const _ = require('underscore');
-const ramp = require('./tempo-ramp.js');
 const create = require('./messages-create.js');
-const set = require('./messages-set.js');
 const BitwigIO = require('./BitwigIO.js');
 
 const io = new BitwigIO;
