@@ -18,6 +18,8 @@
   "homepage": "https://github.com/CharlesHolbrow/tempo-toy-bigwig#readme",
   "dependencies": {
     "osc": "^2.2.4",
+    "sharp11": "^2.0.2",
+    "sharp11-irb": "^1.0.0",
     "underscore": "^1.9.1"
   }
 }
