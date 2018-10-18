@@ -1,8 +1,8 @@
 const create = require('./messages/create.js');
 const set = require('./messages/set.js');
-const BitwigIO = require('./BitwigIO');
+const BitwigIO = require('./classes/BitwigIO');
 const ramp = require('./tempo-ramp.js');
-const Rhythm = require('./Rhythm');
+const Rhythm = require('./classes/Rhythm');
 
 module.exports = {
   BitwigIO,
