@@ -1,4 +1,4 @@
-const create = require('./messages-create.js');
+const create = require('./messages/create.js');
 const BitwigIO = require('./BitwigIO.js');
 
 const io = new BitwigIO;
