@@ -1,5 +1,6 @@
 const EventEmitter = require('events');
 const osc = require('osc');
+
 /**
  * Send messages to bitwitg. We can begin sending as soon as created
  * @fires #message message received
