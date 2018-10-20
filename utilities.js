@@ -1,4 +1,28 @@
-_ = require('underscore');
+const _ = require('underscore');
+const s11 = require('sharp11');
+
+/**
+ * Get an 2d array of s11 Note objects. Very flexible input options include:
+ * - Array of chord name strings (no way to specify octave)
+ * - Array of s11 chords
+ * - 2D array of note name strings
+ * - 2D array of s11 notes (no op)
+ * @param {Integer[][]|s11.chord.Chord[]|String[]|String[][]} chords
+ * @returns {s11.note.Note[][]}
+ */
+const chordList = function(chords) {
+  return chords.map(c => {
+    if (typeof c === 'string') return s11.chord.create(c).chord; // string chord name
+    else if (s11.chord.isChord(c)) return c.chord;               // chord
+    else if (Array.isArray(c)) return c.map(n => {
+      if (typeof n === 'string') return s11.note.create(n);      // string[] (array of note names)
+      else if (s11.note.isNote(n))return n;                      // s11.note.Note[]
+      else throw new Error('chordList - chords argument invalid');
+    });
+    else throw new Error('chordList - chords argument invalid');
+  });
+};
+
 
 /**
  * @param {Number} initialBpm - initial tempo in beats-per-minute
@@ -79,4 +103,7 @@ const ramp = function(initialBpm, finalBpm, durationInBeatsAtInitialTempo, beats
   };
 };
 
-module.exports = ramp;
+module.exports = {
+  chordList,
+  ramp,
+};

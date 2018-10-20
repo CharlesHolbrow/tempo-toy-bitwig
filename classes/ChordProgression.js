@@ -1,5 +1,7 @@
 const s11 = require('sharp11');
 const Rhythm = require('./Rhythm');
+const util = require('../utilities');
+
 
 /**
  * Represents a looping chord progression. This gives lots of convenient ways
@@ -16,16 +18,7 @@ class ChordProgression extends Rhythm {
     /**
      * @param {sharp11.note.Note[]}
      */
-    this.chordList = chords.map(c => {
-      if (typeof c === 'string') return s11.chord.create(c).chord; // string chord name
-      else if (s11.chord.isChord(c)) return c.chord;               // chord
-      else if (Array.isArray(c)) return c.map(n => {
-        if (typeof n === 'string') return s11.note.create(n);      // string[] (array of note names)
-        else if (s11.note.isNote(n))return n;                      // s11.note.Note[]
-        else throw new Error('ChordProgression constructor - chords argument invalid');
-      });
-      else throw new Error('ChordProgression constructor - chords argument invalid');
-    });
+    this.chordList = util.chordList();
   }
 
   /**
@@ -49,5 +42,6 @@ class ChordProgression extends Rhythm {
     return c.chord[voiceIndex % c.chord.length];
   }
 }
+
 
 module.exports = ChordProgression;

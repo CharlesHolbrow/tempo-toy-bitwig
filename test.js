@@ -1,5 +1,5 @@
 const _ = require('underscore');
-const ramp = require('./tempo-ramp.js');
+const util = require('./utilities.js');
 const create = require('./messages/create.js');
 const set = require('./messages/set.js');
 const BitwigIO = require('./classes/BitwigIO.js');
@@ -7,7 +7,7 @@ const BitwigIO = require('./classes/BitwigIO.js');
 const io = new BitwigIO;
 
 // generate timing info
-const rampLengths = [ 34, 35, 36, 37 ];
+const rampLengths = [ 31, 32, 33, 34 ];
 const notes =       [ 48, 51, 55, 56 ];
 
 const BPM = 160; // project bpm
@@ -16,10 +16,12 @@ const targetBPM = 160;
 const staticLength = 32; // length of transition in static beats
 
 // generate ramps
-const ramps = ramp(initialBPM, targetBPM, staticLength, rampLengths);
-console.log('done generatng ramps');
+const ramps = rampLengths.map((rLength, i)=> {
+    return util.ramp(initialBPM, targetBPM, staticLength, rLength + ((i + 1) * 0.25));
+});
 
-_.zip(ramps, notes).forEach((r) => {
+_.zip(ramps, notes).forEach((r, i) => {
+
     const [ramp, note] = r;
     ramp.rampBeatTimes.forEach((time) => {
         const msg = create.launcherClipNote(note, 80, time * BPM, 0.25);
@@ -34,8 +36,5 @@ _.zip(ramps, notes).forEach((r) => {
 
 io.send(set.launcherClipLoop(0, staticLength / initialBPM * BPM));
 
+io.close()
 
-// quit when we are finished sending
-io.on('empty', () => {
-    setTimeout(() => { process.exit()}, 100 );
-});
