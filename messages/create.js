@@ -34,8 +34,9 @@ const launcherClipNote = function(midiNoteNumber, midiVelocity, startBeat, durat
  *        from the top/left
  * @param {Integer} clipIndex - The scene position, beginning from the top/left
  * @param {String} clipName - Name the clip. Will overwrite an existing name
+ * @param {Bool} [clear=false] - should we clear the clip if it already exists?
  */
-const launcherClip = function(trackIndex, clipIndex, clipName) {
+const launcherClip = function(trackIndex, clipIndex, clipName, clear) {
     return {
         address: '/launcher/create-clip',
         args: [
@@ -48,7 +49,10 @@ const launcherClip = function(trackIndex, clipIndex, clipName) {
             },{
                 type: 's',
                 value: clipName,
-            }
+            },{
+                type: 'i',
+                value: clear ? 1 : 0,
+            },
         ],
     };
 };

@@ -15,8 +15,8 @@ class BitwigIO extends EventEmitter {
       metadata: true,
       remoteAddress: "127.0.0.1",
       remotePort: 48888,
-      // localAddress: "127.0.0.1",
-      // localPort: 48889,
+      localAddress: "127.0.0.1",
+      localPort: 48889,
     });
     this.port.open();
 
