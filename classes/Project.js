@@ -50,7 +50,7 @@ class Project {
 
   /**
    * @param {any[]|Number} nvl - the midiNote to create, specified as a midi
-   *        note number, array:
+   *        note number, sharp11 Note, or array:
    *          [0]: midi note
    *          [1]: midi velocity
    *          [2]: note length in beats at the project tempo
