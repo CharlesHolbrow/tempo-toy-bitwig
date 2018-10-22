@@ -143,6 +143,26 @@ class Project {
   }
 
   /**
+   * Note that bitwig tries to help you by adjusting the clip start iff it is at
+   * the same loop start and clip start are the same.
+   * @param {Number} start - start position in project tempo beats
+   * @param {Number} length - loop length in project tempo beats
+   */
+  setClipLoop(start, length) {
+    const msg = set.launcherClipLoop(start, length);
+    this.io.send(msg);
+  }
+
+  /**
+   * Specify where within the clip it will start playing when we 'play' it.
+   * @param {Number} start - clip start time in beats.
+   */
+  setClipStart(start) {
+    const msg = set.launcherClipStart(start);
+    this.io.send(msg);
+  }
+
+  /**
    * Create and name a launcher clip, optionally deleting the existing clip.
    * @param {Integer} trackIndex - track number (starting on 1 - consistency!)
    * @param {Integer} clipIndex - clip position (starting on 1 - to match GUI)

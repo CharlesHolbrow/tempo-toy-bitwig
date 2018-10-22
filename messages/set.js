@@ -17,6 +17,22 @@ const launcherClipLoop = function(loopStart, loopLength) {
     }
 }
 
+/**
+ * @param {Number} clipStart - set clip start time. value is in beats
+ */
+const launcherClipStart = function(clipStart) {
+    return {
+        address: '/launcher/selected-clip/set-start',
+        args: [
+            {
+                type: 'f',
+                value: clipStart,
+            },
+        ],
+    }
+}
+
 module.exports = {
     launcherClipLoop,
+    launcherClipStart,
 }
