@@ -76,7 +76,7 @@ class Project {
       throw new Error("createTempoRampNotes got bad note:" + nvl);
     }
 
-    const r = util.ramp(
+    const r = util.rampMemo(
       this.initialTempo,
       this.finalTempo,
       durationInBeatsAtInitialTempo,

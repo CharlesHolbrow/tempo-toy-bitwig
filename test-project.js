@@ -2,8 +2,6 @@ const bw = require('./');
 
 const project = new bw.Project(160);
 
-
-
 const c1 = [48, 50, 53, 55];
 const c2 = [50, 57, 62, 65];
 const b1 =[33, 34, 35, 36];

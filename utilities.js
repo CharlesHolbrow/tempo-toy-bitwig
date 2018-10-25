@@ -103,7 +103,14 @@ const ramp = function(initialBpm, finalBpm, durationInBeatsAtInitialTempo, beats
   };
 };
 
+const rampMemo = _.memoize(ramp, (...args) => {
+  let s = '';
+  _.each(args, (a) => { s = s + args + '|'});
+  return s;
+});
+
 module.exports = {
   chordList,
   ramp,
+  rampMemo,
 };

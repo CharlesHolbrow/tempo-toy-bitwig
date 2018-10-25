@@ -20,6 +20,7 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "midi-help": "^0.2.1",
     "osc": "^2.2.4",
     "sharp11": "^2.0.2",
     "sharp11-irb": "^1.0.0",
