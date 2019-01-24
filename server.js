@@ -36,8 +36,8 @@ app.post('/integrate', (req, res) => {
     }
   }
 
-  var notes = req.body.notes.map((n) => Math.floor(n));
   var body = req.body;
+  var notes = body.notes.map((n) => Math.floor(n));
   var beats = notes.map((note, i) => 33 + i);
 
   project.newLauncherClip(body.x, body.y, body.name, true);

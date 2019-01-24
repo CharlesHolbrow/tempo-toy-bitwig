@@ -1,4 +1,8 @@
 // more convenient way to make a request
+// Example usage:
+// request('post', '/integrate', {}, (err, res)=>{
+//  console.log(err, res);
+// });
 function request(method, path, body, cb) {
   cb = cb || function(){};
   var r = new XMLHttpRequest();
@@ -23,9 +27,24 @@ function request(method, path, body, cb) {
   r.send(body);
 }
 
-request('post', '/integrate', {}, (err, res)=>{
-  console.log(err, res);
-});
+// get the form data
+function configData() {
+  var inputs = document.getElementById('config').getElementsByTagName('input');
+  var result = {};
+  Array.from(inputs).forEach((child) => {
+    var name = child.getAttribute('name');
+    var value = child.value;
+    // If the value is all of the following, convert to number
+    // 1. a non empty string
+    // 2. converts to a number
+    // 3. has no suffix (like '12px')
+    if (!isNaN(+value) &&!isNaN(parseFloat(value))) value = +value;
+    result[name] = value;
+  });
+  return result;
+}
+
+
 
 // Create buttons
 var buttons = [];
@@ -109,14 +128,16 @@ parser.on('chord', function(chord){
 buttons.forEach(function(b){
   b.onclick = function(){
     if (!b.chord) return;
-
     console.log(b, b.chord.s11Notes);
-    request('post', '/integrate', {
+    var requestBody = {
       x: b.xy.x,
       y: b.xy.y,
       notes: b.chord.s11Notes.map(function(v){ return v.value(); }),
       name: b.chord.name,
-    }, function(err, res){
+    };
+    // add the values from the config form
+    Object.assign(requestBody, configData());
+    request('post', '/integrate', requestBody, function(err, res){
       if (err) console.log('Error sending request:', err, res);
     });
   }
