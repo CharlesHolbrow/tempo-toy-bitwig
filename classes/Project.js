@@ -94,10 +94,10 @@ class Project {
   /**
    * Create a swarm of tempo ramps, ending in an arpeggio.
    *
-   * I haven't toally thought through the math here, but it seems to be working
+   * I haven't totally thought through the math here, but it seems to be working
    * pretty well.
    *
-   * The arppeggio might be a little weird when there are a lot of voices. In the
+   * The arpeggio might be a little weird when there are a lot of voices. In the
    * current implementation, the voices arp over a single beat of the final tempo.
    * @param {notes[]} notes - arrays of anything that createTempoRampNotes
    *        accepts (one per voice)
@@ -109,7 +109,7 @@ class Project {
   createRampsStartFirst(notes, durationInBeatsAtInitial, durationsInRamps) {
     const count = notes.length;
 
-    // The duration of the transtion is specified in beats at the initial tempo.
+    // The duration of the transition is specified in beats at the initial tempo.
     // However, we want the arpeggio that happens on completion to be in the
     // completion tempo. Assuming quarter notes, we need to specify one quarter
     // of a beat (at the end) in terms of the initial tempo.
