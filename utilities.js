@@ -59,8 +59,12 @@ const ramp = function(initialBpm, finalBpm, durationInBeatsAtInitialTempo, beats
 
   resolution = resolution || 1000000;
 
-  // array of times (in minutes) at which we will sample our curves
-  const time = _(_.range(resolution + 1)).map(function(val){return val / resolution * durationInMinutes});
+  // array of times (in minutes) at which we will sample our curves. Our array
+  // of times extends past the total duration we are covering, so that we can be
+  // sure that the last beat is included in the final array. Previously, we used
+  // `resolution+1`, and some ramps were missing their last beat, probably due
+  // to floating point errors.
+  const time = _(_.range(resolution + 10)).map(function(val){return val / resolution * durationInMinutes});
 
   // how many beats (in the changing tempo) have elapsed sampled at <resolution>
   const rampBeatsElapsed = _(time).map(function(t){
@@ -72,7 +76,7 @@ const ramp = function(initialBpm, finalBpm, durationInBeatsAtInitialTempo, beats
     return v0 + (a0 * t) + (a1 * t * t)/2;
   });
 
-  // how many beats (in the static tempo) elapsed, sampled at <resuolution>
+  // how many beats (in the static tempo) elapsed, sampled at <resolution>
   const staticBeatsElapsed = _(time).map(function(t){
     return initialBpm * t;
   });
@@ -85,13 +89,19 @@ const ramp = function(initialBpm, finalBpm, durationInBeatsAtInitialTempo, beats
   const timesAndBeats = _.zip(time, rampBeatsElapsed)
 
   // We are looking for the time of each beat
-  const rampBeatTimes = [];
+  let rampBeatTimes = [];
   timesAndBeats.reduce((prev, current)=> {
-      if (Math.floor(current[1]) > Math.floor(prev[1])) {
-          rampBeatTimes.push(current[0]);
-      }
-      return current;
+    // current[0] is a 'time-in-minutes'
+    // current[1] is a 'ramp-beats-elapsed'
+    if (Math.floor(current[1]) > Math.floor(prev[1])) {
+      // the current ramp-beats-elapsed > the previous ramp-beats-elapsed-round-down
+      rampBeatTimes.push(current[0]);
+    }
+    return current;
   }, [-1, -1]);
+  // because our `time` array goes slightly longer than the very last beat, it
+  // is possible if unlikely that it has too many results in it. Safely trim it.
+  rampBeatTimes = rampBeatTimes.slice(0, beatsInChangingTempo + 1);
 
   return {
     rampBeatTimes,      // .length === beatsInChangingTempo
