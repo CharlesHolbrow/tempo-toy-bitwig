@@ -68,7 +68,10 @@ app.post('/integrate', (req, res) => {
   project.newLauncherClip(body.x, body.y, body.name, true);
   project.createRampsStartFirst(body.notes, duration, beats);
   // duration is in 'beats@initial' we want it in projectBeats
-  project.setClipLoop(duration * project.BPM / project.initialTempo, 1);
+  // setClipLoop expects values specified relative to the project tempo
+  // duration/initialRatio converts beats@initalBPM to beats@projectBPM
+  // 1/finalRatio is one measure at final bpm expressed in beats@projectBPM
+  project.setClipLoop(duration/project.initialRatio, 1/project.finalRatio);
   project.setClipStart(0);
 
   res.setHeader('Content-Type', 'text/plain');

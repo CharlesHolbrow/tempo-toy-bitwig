@@ -113,8 +113,7 @@ class Project {
   /**
    * Create a swarm of tempo ramps, ending in an arpeggio.
    *
-   * I haven't totally thought through the math here, but it seems to be working
-   * pretty well.
+   * The final arpeggio will last one beat at the final tempo.
    *
    * The arpeggio might be a little weird when there are a lot of voices. In the
    * current implementation, the voices arp over a single beat of the final tempo.
@@ -132,12 +131,12 @@ class Project {
     // However, we want the arpeggio that happens on completion to be in the
     // completion tempo. Assuming quarter notes, we need to specify one quarter
     // of a beat (at the end) in terms of the initial tempo.
-    const extraEnd = (this.initialRatio / this.finalRatio) / count;
+    const extraEnd = (this.initialTempo / this.finalTempo) / count;
 
     console.log(extraEnd);
 
     for (let [i, [note, rampDuration]] of _.zip(notes, durationsInRamps).entries()) {
-      let id = durationInBeatsAtInitial + (extraEnd * i);
+      let id = durationInBeatsAtInitial + (extraEnd * i); // duration in beats @ initial
       console.log(i, note, id, rampDuration)
       this.createTempoRampNotes(note, id, rampDuration);
     }
