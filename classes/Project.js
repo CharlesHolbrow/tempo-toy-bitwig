@@ -161,8 +161,8 @@ class Project {
   }
 
   /**
-   * Note that bitwig tries to help you by adjusting the clip start iff it is at
-   * the same loop start and clip start are the same.
+   * Note that Bitwig tries to help you by adjusting the clip start iff loop
+   * start and clip start are the same.
    * @param {Number} start - start position in project tempo beats
    * @param {Number} length - loop length in project tempo beats
    */
