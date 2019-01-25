@@ -38,6 +38,16 @@ class Project {
     return this.rampRange.finalRatio;
   }
 
+  set initialTempo(v) {
+    if (typeof v !== 'number') throw new Error('initial tempo must be a number');
+    this.rampRange.initialRatio = v / this.BPM;
+  }
+
+  set finalTempo(v) {
+    if (typeof v !== 'number') throw new Error('final tempo must be a number');
+    this.rampRange.finalRatio = v / this.BPM;
+  }
+
   set initialRatio(v) {
     if (typeof v !== 'number') throw new Error('ramp ratio must be a number');
     this.rampRange.initialRatio = v;
@@ -57,12 +67,17 @@ class Project {
    *        or a function that returns the [n,v,l] array
    *
    * @param {Number} durationInBeatsAtInitialTempo - How long should the
-   *        transition last, measure in beats at the initial tempo.
+   *        transition last, measured in beats at the initial tempo.
    * @param {Number|Number[]} beatsInChangingTempo - how many beats in the
    *        changing tempo. If this is an array, return an array of ramps.
+   * @param {Number} [preDelayInBeatsAtInitialTempo=0] - After computing the
+   *        ramp, add this to the start time of all notes.
    */
-  createTempoRampNotes(nvl, durationInBeatsAtInitialTempo, beatsInChangingTempo) {
+  createTempoRampNotes(nvl, durationInBeatsAtInitialTempo, beatsInChangingTempo, preDelayInBeatsAtInitialTempo) {
     let noteFunc; // a function that returns the [n, v, l] array
+
+    if (typeof preDelayInBeatsAtInitialTempo !== 'number')
+      preDelayInBeatsAtInitialTempo = 0;
 
     if (Array.isArray(nvl)) {
       noteFunc = () => nvl;
@@ -84,9 +99,13 @@ class Project {
       this.rampRange.resolution
     );
 
+    // Convert preDelayInBeatsAtInitialTempo to minutes so it matches the units
+    // of r.rampBeatTimes.
+    const preDelayInMinutes = preDelayInBeatsAtInitialTempo / this.initialTempo;
     for (let t of r.rampBeatTimes) {
       let [n, v, l] = noteFunc();
-      const msg = create.launcherClipNote(n, v, t * this.BPM, l);
+      const noteStartTimeInBeats = (t + preDelayInMinutes) * this.BPM;
+      const msg = create.launcherClipNote(n, v, noteStartTimeInBeats, l);
       this.io.send(msg);
     }
   }

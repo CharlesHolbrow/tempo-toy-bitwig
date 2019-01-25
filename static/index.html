@@ -27,6 +27,10 @@ html, body {
   text-decoration: none;
   min-width: 220px;
 }
+
+input, select {
+  margin: 6px;
+}
 </style>
 <body>
   <h1>Tempic Integrator</h1>
@@ -35,12 +39,27 @@ html, body {
   <div>
     <form action="" id='config'>
       <div>
-        <input type='number' min='0' name='transition-duration-in-beats' value='32'>
-        transition duration in static beats
+        <input type='number' min='1' name='project-bpm' value='120'>
+        project BPM
       </div>
       <div>
-        <input type='text' min='0' name='moving-beats' value='32'>
-        moving beats
+        <input type='number' min='1' name='initial-bpm' value='80'>
+        initial BPM
+      </div>
+      <div>
+        <input type='number' min='1' name='final-bpm' value='120'>
+        final BPM
+      </div>
+      <div>
+        <input type='number' min='0' name='duration-in-beats' value='32'>
+        transition duration in initial bpm
+      </div>
+      <div>
+        <select name='arp-dir'>
+          <option value="up" selected>Arp up</option>
+          <option value="down">Arp down</option>
+        </select>
+        Arpeggio direction
       </div>
     </form>
   </div>

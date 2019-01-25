@@ -29,9 +29,11 @@ function request(method, path, body, cb) {
 
 // get the form data
 function configData() {
-  var inputs = document.getElementById('config').getElementsByTagName('input');
   var result = {};
-  Array.from(inputs).forEach((child) => {
+  var configForm = document.getElementById('config');
+  var inputs = Array.from(configForm.getElementsByTagName('input'));
+  var selects = Array.from(configForm.getElementsByTagName('select'));
+  inputs.concat(selects).forEach((child) => {
     var name = child.getAttribute('name');
     var value = child.value;
     // If the value is all of the following, convert to number
@@ -146,18 +148,18 @@ buttons.forEach(function(b){
 // Annoying Midi Boilerplate
 if (navigator.requestMIDIAccess) {
   navigator.requestMIDIAccess({
-      sysex: false // this defaults to 'false' and we won't be covering sysex in this article.
+    sysex: false // this defaults to 'false'
   }).then(function(midiAccess){
     window.midiAccess = midiAccess;
     var inputs = midiAccess.inputs.values();
     // loop over all available inputs and listen for any MIDI input
     for (var input = inputs.next(); input && !input.done; input = inputs.next()) {
-        // each time there is a midi message call the onMIDIMessage function
-        input.value.onmidimessage = function(event){
-          if (event.data) {
-            parser.parseArray(event.data);
-          }
+      // each time there is a midi message call the onMIDIMessage function
+      input.value.onmidimessage = function(event){
+        if (event.data) {
+          parser.parseArray(event.data);
         }
+      }
     }
   }, function(){console.log('failed to get midi access')});
 } else {
