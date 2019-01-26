@@ -123,22 +123,41 @@ class Project {
    *        at the initial tempo.
    * @param {Number[]} durationsInRamps - array of the transition beats (one
    *        per voice)
+   * @param {String} [startStyle={}] - optional configuration.
+   *        startStyle = 'arp-up' // start the ramps with an arp. the first note
+   *        note in `notes` will begin at t=0. The next note will be slightly
+   *        offset.
+   *        startStyle = 'flat'
    */
-  createRampsStartFirst(notes, durationInBeatsAtInitial, durationsInRamps) {
+  createRampsStartFirst(notes, durationInBeatsAtInitial, durationsInRamps, startStyle) {
     const count = notes.length;
+    if (typeof startStyle !== 'string' || startStyle === '') startStyle = 'flat';
 
     // The duration of the transition is specified in beats at the initial tempo.
     // However, we want the arpeggio that happens on completion to be in the
     // completion tempo. Assuming quarter notes, we need to specify one quarter
     // of a beat (at the end) in terms of the initial tempo.
     const extraEnd = (this.initialTempo / this.finalTempo) / count;
+    // Our arp start offset is also in `beats@initial`. this is easy.
+    const extraStart = 1 / count;
 
     console.log(extraEnd);
 
     for (let [i, [note, rampDuration]] of _.zip(notes, durationsInRamps).entries()) {
-      let id = durationInBeatsAtInitial + (extraEnd * i); // duration in beats @ initial
-      console.log(i, note, id, rampDuration)
-      this.createTempoRampNotes(note, id, rampDuration);
+      // initial duration in beats @ initial
+      let id = durationInBeatsAtInitial + (extraEnd * i);
+      let preDelay = 0;
+      // if we are supposed to start with an arp, adjust preDelay and duration
+      if (startStyle === 'arp-up') {
+        preDelay = i * extraStart;
+        id -= preDelay;
+      } else if (startStyle === 'flat') {
+        // do nothing
+      } else {
+        throw new Error('Tried to create ramp with invalid start style: '+startStyle)
+      }
+      console.log(i, note, id, rampDuration, preDelay);
+      this.createTempoRampNotes(note, id, rampDuration, preDelay);
     }
   }
 

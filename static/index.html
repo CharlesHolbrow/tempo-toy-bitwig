@@ -55,11 +55,15 @@ input, select {
         transition duration in initial bpm
       </div>
       <div>
-        <select name='arp-dir'>
-          <option value="up" selected>Arp up</option>
-          <option value="down">Arp down</option>
+        <input type='number' min='1' name='transition-beats' value='33'>
+        How many beats in the first ramp (the others increment/decrement by 1)
+      </div>
+      <div>
+        <select name='start-style'>
+          <option value="flat" selected>Flat</option>
+          <option value="arp-up">Arp up</option>
         </select>
-        Arpeggio direction
+        Start style
       </div>
     </form>
   </div>
