@@ -2,6 +2,8 @@ const EventEmitter = require('events');
 const _ = require('underscore');
 const osc = require('osc');
 
+const Molasses = require('./Molasses');
+
 /**
  * Send messages to bitwitg.
  * @fires #message message received
@@ -20,6 +22,11 @@ class BitwigIO extends EventEmitter {
     });
     this.port.open();
 
+    this.molasses = new Molasses((...args) => {
+      this.port.send.apply(this.port, args);
+      if (this.molasses.queue.length === 0) this.emit('empty');
+    });
+
     // messages sent before we are ready should be saved here
     this.queue = [];
     this.ready = false;
@@ -32,7 +39,6 @@ class BitwigIO extends EventEmitter {
         this.send.apply(this, args);
       }
       this.emit('ready');
-      this.emit('empty');
     });
 
     this.port.on('error', (e) => {
@@ -50,11 +56,19 @@ class BitwigIO extends EventEmitter {
    * queued until the port is ready. This allows us to use the send command as
    * soon the instance is created with `new BitwigIO`.
    */
-  send() {
+  send(oscObject) {
     if (!this.ready) {
       this.queue.push(arguments)
     } else {
-      this.port.send.apply(this.port, arguments);
+      let pause = 10;
+      if (typeof oscObject === 'object') {
+        if (oscObject.address === '/launcher/create-clip'){
+          pause = 200;
+          console.log('wait until it is finished');
+        }
+      }
+      this.molasses.push(arguments, pause);
+      // this.port.send.apply(this.port, arguments);
     }
   }
 
@@ -75,7 +89,7 @@ class BitwigIO extends EventEmitter {
     // If we already have an error, the 'empty' message may never come. To
     // prevent us from waiting indefinitely, just close now.
     if (this.error) close(this.error);
-    else if (this.ready && this.queue.length === 0) close();
+    else if (this.ready && this.queue.length === 0 && this.molasses.queue.length === 0) close();
     else {
       this.on('empty', close);
       this.on('error', close);
