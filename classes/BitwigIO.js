@@ -60,15 +60,8 @@ class BitwigIO extends EventEmitter {
     if (!this.ready) {
       this.queue.push(arguments)
     } else {
-      let pause = 10;
-      if (typeof oscObject === 'object') {
-        if (oscObject.address === '/launcher/create-clip'){
-          pause = 200;
-          console.log('wait until it is finished');
-        }
-      }
+      let pause = 15;
       this.molasses.push(arguments, pause);
-      // this.port.send.apply(this.port, arguments);
     }
   }
 

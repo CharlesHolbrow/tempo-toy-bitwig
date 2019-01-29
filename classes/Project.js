@@ -4,6 +4,7 @@ const s11 = require('sharp11');
 const BitwigIO = require('./BitwigIO');
 const create = require('../messages/create');
 const set = require('../messages/set');
+const select = require('../messages/select');
 const util = require('../utilities');
 
 class Project {
@@ -141,8 +142,6 @@ class Project {
     // Our arp start offset is also in `beats@initial`. this is easy.
     const extraStart = 1 / count;
 
-    console.log(extraEnd);
-
     for (let [i, [note, rampDuration]] of _.zip(notes, durationsInRamps).entries()) {
       // initial duration in beats @ initial
       let id = durationInBeatsAtInitial + (extraEnd * i);
@@ -160,6 +159,7 @@ class Project {
       this.createTempoRampNotes(note, id, rampDuration, preDelay);
     }
   }
+
 
   setClipLengthInBeatsAtProjectTempo(beats, tempo) {
     tempo = typeof tempo === 'number' ? tempo : this.BPM;
@@ -201,6 +201,7 @@ class Project {
 
   /**
    * Create and name a launcher clip, optionally deleting the existing clip.
+   * This automatically selects the clip;
    * @param {Integer} trackIndex - track number (starting on 1 - consistency!)
    * @param {Integer} clipIndex - clip position (starting on 1 - to match GUI)
    * @param {string} name - clip name
@@ -208,6 +209,15 @@ class Project {
    */
   newLauncherClip(trackIndex, clipIndex, name, clear) {
     const msg = create.launcherClip(trackIndex-1, clipIndex-1, name, clear);
+    this.io.send(msg);
+  }
+
+  /**
+   * @param {Integer} trackIndex - track number (starting on 1 - consistency!)
+   * @param {Integer} clipIndex - clip position (starting on 1 - to match GUI)
+   */
+  selectLauncherClipSlot(trackIndex, clipIndex){
+    const msg = select.launcherClipSlot(trackIndex, clipIndex);
     this.io.send(msg);
   }
 

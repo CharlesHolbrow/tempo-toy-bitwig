@@ -80,21 +80,17 @@ app.post('/integrate', (req, res) => {
   var beats = notes.map((note, i) => transitionBeats + ((i) * bInc));
   console.log(req.body, beats);
 
+  // newLauncherClip does automatically select the clip slot
   project.newLauncherClip(body.x, body.y, body.name, true);
-  // I'm putting the rest this function in the timeout below as an experiment.
-  // Will this stop the bug where occasionally the notes would not be created
-  // inside the new bitwig clip?
-  setTimeout(()=>{
-    project.createRampsStartFirst(body.notes, duration, beats, startStyle);
-    // duration is in 'beats@initial' we want it in projectBeats
-    // setClipLoop expects values specified relative to the project tempo
-    // duration/initialRatio converts beats@initalBPM to beats@projectBPM
-    // 1/finalRatio is one measure at final bpm expressed in beats@projectBPM
-    project.setClipLoop(duration/project.initialRatio, 1/project.finalRatio);
-    project.setClipStart(0);
-    // send response
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('ok');
-  }, 10);
+  // duration is in 'beats@initial' we want it in projectBeats
+  // setClipLoop expects values specified relative to the project tempo
+  // duration/initialRatio converts beats@initalBPM to beats@projectBPM
+  // 1/finalRatio is one measure at final bpm expressed in beats@projectBPM
+  project.setClipLoop(duration/project.initialRatio, 1/project.finalRatio);
+  project.setClipStart(0);
+  project.createRampsStartFirst(body.notes, duration, beats, startStyle);
+  // send response
+  res.setHeader('Content-Type', 'text/plain');
+  res.end('ok');
 });
 app.listen(3001, '127.0.0.1');
