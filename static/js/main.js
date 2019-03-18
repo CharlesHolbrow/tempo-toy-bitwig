@@ -53,10 +53,10 @@ var buttons = [];
 var parent = document.createElement('div');
 var focusElement = null
 document.body.appendChild(parent)
-for (var y = 1; y <= 6; y++) {
+for (var y = 1; y <= 4; y++) {
   var div = document.createElement('div')
   parent.appendChild(div);
-  for (var x = 1; x <= 2; x++) {
+  for (var x = 1; x <= 3; x++) {
     var b = document.createElement('button');
     b.innerText = '-';
     b.classList.add('btn');
