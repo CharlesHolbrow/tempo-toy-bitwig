@@ -12,7 +12,9 @@ Before you can install the server, you must do the following:
     - Download [the script](https://raw.githubusercontent.com/CharlesHolbrow/charles-bitwig-osc/master/bitwig-controller/index.control.js) and put it in the appropriate directory. Double check, but I believe this is:
         - Mac: `~/Documents/Bitwig Studio/Controller Scripts/`
         - Windows: `%USERPROFILE%\Documents\Bitwig Studio\Controller Scripts\`
-    - Close and reopen BitWig Studio and go to `Settings -> controllers`. If the controller script that you downloaded is in the correct directory, you should see `charles-bitwig-osc`. Click the power button icon to activate the controller script. BitWig is now listening for OSC messages from the Tempic Integrator.  
+    - Close and reopen BitWig Studio and go to `Settings -> controllers`. 
+    - Click `Add -> Charles -> charles-bitwig-osc` If this option is not available, the controller script may not be in the correct directory. 
+    - Click the power button icon next to `charles-bitwig-osc` to activate the controller script. BitWig is now listening for OSC messages from the Tempic Integrator.  
     - Note that depending on your version of BitWig studio, you may need to re-activate the script every time you open bitwig. 
 
 
