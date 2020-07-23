@@ -161,7 +161,7 @@ if (navigator.requestMIDIAccess) {
         }
       }
     }
-  }, function(){console.log('failed to get midi access')});
+  }, function(reason){console.log('failed to get midi access:', reason)});
 } else {
   console.log("No MIDI support in your browser.");
 }
