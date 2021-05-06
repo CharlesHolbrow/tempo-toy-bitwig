@@ -24,7 +24,7 @@
     "osc": "^2.2.4",
     "sharp11": "^2.0.2",
     "sharp11-irb": "^1.0.0",
-    "underscore": "^1.10.2"
+    "underscore": "^1.12.1"
   },
   "devDependencies": {
     "nodemon": "^1.19.4"
